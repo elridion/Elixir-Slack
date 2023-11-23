@@ -2,11 +2,13 @@ defmodule Slack.LookupsTest do
   use ExUnit.Case
   alias Slack.Lookups
 
+  @tag :capture_log
   test "turns @user into a user identifier" do
     slack = %{users: %{"U123" => %{name: "user", id: "U123", profile: %{display_name: "user"}}}}
     assert Lookups.lookup_user_id("@user", slack) == "U123"
   end
 
+  @tag :capture_log
   test "turns @user into direct message identifier, if the channel exists" do
     slack = %{
       users: %{"U123" => %{name: "user", id: "U123", profile: %{display_name: "user"}}},
@@ -46,16 +48,19 @@ defmodule Slack.LookupsTest do
     assert Lookups.lookup_channel_id("#unknown", slack) == nil
   end
 
+  @tag :capture_log
   test "turns a user identifier into @user (Uxxxx)" do
     slack = %{users: %{"U123" => %{name: "user", id: "U123", profile: %{display_name: "user"}}}}
     assert Lookups.lookup_user_name("U123", slack) == "@user"
   end
 
+  @tag :capture_log
   test "turns a user identifier into @user (Wxxxx)" do
     slack = %{users: %{"W123" => %{name: "user", id: "W123", profile: %{display_name: "user"}}}}
     assert Lookups.lookup_user_name("W123", slack) == "@user"
   end
 
+  @tag :capture_log
   test "turns a direct message identifier into @user (Uxxxx)" do
     slack = %{
       users: %{"U123" => %{name: "user", id: "U123", profile: %{display_name: "user"}}},
@@ -65,6 +70,7 @@ defmodule Slack.LookupsTest do
     assert Lookups.lookup_user_name("D789", slack) == "@user"
   end
 
+  @tag :capture_log
   test "turns a direct message identifier into @user (Wxxxx)" do
     slack = %{
       users: %{"W123" => %{name: "user", id: "W123", profile: %{display_name: "user"}}},
